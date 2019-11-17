@@ -14,3 +14,9 @@
 ## Help
 
 To make the application up and running you need to get the csv file and import the data using `Import` option of application.
+
+To See the data related to each store click on grid row.
+
+The grids has functionality of Search/Sort.
+
+For storing data , we are using localstorage (which is not a good option) but as this is a simple POC i am keeping it there. Ideally data should be load thorough APIS.
