@@ -1,0 +1,129 @@
+<h3>Search and Filter your data here!</h3>
+<mat-form-field>
+    <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter Store!">
+</mat-form-field>
+<div class="example-container mat-elevation-z8">
+    <div class="example-loading-shade"
+         *ngIf="isLoadingResults || noData">
+        <div class="example-rate-limit-reached" *ngIf="noData">
+            No Data available for Analysis. Please use Import button to upload Data.
+        </div>
+    </div>
+
+    <div class="example-table-container">
+        <table mat-table
+               [dataSource]="dataSource" multiTemplateDataRows matSort
+               class="mat-elevation-z8">
+            <ng-container matColumnDef="select">
+                <th mat-header-cell *matHeaderCellDef>
+                    <mat-checkbox (change)="$event ? masterToggle() : null"
+                                  [checked]="selection.hasValue() && isAllSelected()"
+                                  [indeterminate]="selection.hasValue() && !isAllSelected()"
+                                  [aria-label]="checkboxLabel()">
+                    </mat-checkbox>
+                </th>
+                <td mat-cell *matCellDef="let row">
+                    <mat-checkbox (click)="$event.stopPropagation()"
+                                  (change)="$event ? selection.toggle(row) : null"
+                                  [checked]="selection.isSelected(row)"
+                                  [aria-label]="checkboxLabel(row)">
+                    </mat-checkbox>
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="name">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>STORE NAME </th>
+                <td mat-cell *matCellDef="let row"> {{row.name}} </td>
+            </ng-container>
+
+            <!-- Progress Column -->
+            <ng-container matColumnDef="region">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Region </th>
+                <td mat-cell *matCellDef="let row"> {{row.region}} </td>
+            </ng-container>
+
+            <!-- Name Column -->
+            <ng-container matColumnDef="city">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> City </th>
+                <td mat-cell *matCellDef="let row"> {{row.city}} </td>
+            </ng-container>
+
+            <!-- Color Column -->
+            <ng-container matColumnDef="owner">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Owner </th>
+                <td mat-cell *matCellDef="let row" [style.color]="row.color"> {{row.owner}} </td>
+            </ng-container>
+
+            <!-- Name Column -->
+            <ng-container matColumnDef="province">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Province </th>
+                <td mat-cell *matCellDef="let row"> {{row.province}} </td>
+            </ng-container>
+
+            <!-- Color Column -->
+            <ng-container matColumnDef="square_feet">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Area (Sq Ft) </th>
+                <td mat-cell *matCellDef="let row" [style.color]="row.color"> {{row.square_feet}} </td>
+            </ng-container>
+
+
+            <!-- Expanded Content Column - The detail row is made up of this one column that spans across all columns -->
+            <ng-container matColumnDef="expandedDetail">
+                <td mat-cell *matCellDef="let element" [attr.colspan]="columnsToDisplay.length">
+                    <div class="example-element-detail"
+                         [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'" fxLayout="row wrap" fxLayout.xs="column" fxLayoutAlign="space-around center" fxLayoutGap="25px">
+                        <mat-card class="example-card mat-elevation-z" fxFlex="calc(33%-5px)" fxFlex.sm="calc(50%-5px)">
+                            <mat-card-content>
+                        <div fxLayout="row wrap" fxLayoutAlign="start center" fxLayoutGap="10px" style="width:100%" *ngIf="expandedElement">
+                            <div class="item item-3" fxFlex>
+                                <div class="example-element-description">
+                                    <app-grid [activity]="element.retailActivity" [columnsToDisplay]="['Type','Activity_Date','Activity_Type', 'Status']" [filterText]="filter_text_for_activity"></app-grid>
+                                </div>
+                            </div>
+                        </div>
+                            </mat-card-content>
+                        </mat-card>
+                        <mat-card class="example-card">
+                            <mat-card-content>
+                            <div fxLayout="row wrap" fxLayoutAlign="start center" fxLayoutGap="10px" style="width:50%" *ngIf="expandedElement">
+                            <div class="item item-2" fxFlexOrder="2">
+                                <div class="example-element-description">
+                                    <app-pie-representation [survey]="element.survey"></app-pie-representation>
+                                </div>
+                            </div>
+                            </div>
+                            </mat-card-content>
+                        </mat-card>
+                        <mat-card class="example-card">
+                            <mat-card-content>
+                                <div fxLayout="row wrap" fxLayoutAlign="start center" fxLayoutGap="10px" *ngIf="expandedElement">
+                                    <div class="item item-2" fxFlexOrder="2">
+                                        <div class="example-element-description">
+                                            <app-grouped-bar [data]="element.retailData"></app-grouped-bar>
+                                        </div>
+                                    </div>
+                                </div>
+                            </mat-card-content>
+                        </mat-card>
+                    </div>
+                </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="columnsToDisplay,sticky: true"></tr>
+            <tr mat-row *matRowDef="let element; columns: columnsToDisplay;"
+                class="example-element-row"
+                [class.example-expanded-row]="expandedElement === element"
+                (click)="[expandedElement = expandedElement === element ? null : element,callresize()]">
+            </tr>
+            <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="example-detail-row"></tr>
+        </table>
+
+        <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+    </div>
+</div>
+
+
+
+
+
+
