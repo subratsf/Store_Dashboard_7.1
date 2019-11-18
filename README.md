@@ -11,6 +11,9 @@
 ## Demo Route
 `http://localhost:4200`
 
+The app is also deploye on heroku `https://store-dashboard-7-1.herokuapp.com/#/home` 
+(you might not able to open this url as this is a private app and I need to add you as collaborator) Please contact me for access. (Subrat Thakur - subrat.thakur@salesforce.com)
+
 ## Help
 
 To make the application up and running you need to get the csv file and import the data using `Import` option of application.
