@@ -1,17 +1,17 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
-import { MatTableDataSource, MatPaginator, MatSort } from '@angular/material';
+import {MatTableDataSource, MatPaginator, MatSort} from '@angular/material';
 import {animate, state, style, transition, trigger} from '@angular/animations';
 import {SelectionModel} from '@angular/cdk/collections';
 import {UploadService} from '../upload/upload.service';
 
 export interface PeriodicElement {
-  name: string;
-  region: string;
-  city: string;
-  owner: string;
-  province: string;
-  square_feet: string;
-  survey: SurveyElement;
+    name: string;
+    region: string;
+    city: string;
+    owner: string;
+    province: string;
+    square_feet: string;
+    survey: SurveyElement;
 }
 
 export interface SurveyElement {
@@ -27,54 +27,54 @@ export interface RetailActivity {
 }
 
 @Component({
-  selector: 'app-home',
-  templateUrl: './home.component.html',
-  styleUrls: ['./home.component.scss'],
-  animations: [
-    trigger('detailExpand', [
-      state('collapsed', style({height: '0px', minHeight: '0', display: 'none'})),
-      state('expanded', style({height: '*'})),
-      transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
-    ]),
-  ],
+    selector: 'app-home',
+    templateUrl: './home.component.html',
+    styleUrls: ['./home.component.scss'],
+    animations: [
+        trigger('detailExpand', [
+            state('collapsed', style({height: '0px', minHeight: '0', display: 'none'})),
+            state('expanded', style({height: '*'})),
+            transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
+        ]),
+    ],
 })
 export class HomeComponent implements OnInit {
 
-  columnsToDisplay = ['name', 'region', 'city', 'owner', 'province', 'square_feet'];
-  monthNames = [ 'January', 'February', 'March', 'April', 'May', 'June',
-        'July', 'August', 'September', 'October', 'November', 'December' ];
-  expandedElement: PeriodicElement | null;
-  dataSource: MatTableDataSource<PeriodicElement>;
-  selection = new SelectionModel<PeriodicElement>(true, []);
-  storelist: PeriodicElement[] = [];
-  list: PeriodicElement[] = [];
-  noData = false;
-  isLoadingResults = true;
-  filter_text_for_activity = "Filter Store Activity";
+    columnsToDisplay = ['name', 'region', 'city', 'owner', 'province', 'square_feet'];
+    monthNames = ['January', 'February', 'March', 'April', 'May', 'June',
+        'July', 'August', 'September', 'October', 'November', 'December'];
+    expandedElement: PeriodicElement | null;
+    dataSource: MatTableDataSource<PeriodicElement>;
+    selection = new SelectionModel<PeriodicElement>(true, []);
+    storelist: PeriodicElement[] = [];
+    list: PeriodicElement[] = [];
+    noData = false;
+    isLoadingResults = true;
+    filter_text_for_activity = "Filter Store Activity";
 
-  @ViewChild(MatPaginator) paginator: MatPaginator;
-  @ViewChild(MatSort) sort: MatSort;
+    @ViewChild(MatPaginator) paginator: MatPaginator;
+    @ViewChild(MatSort) sort: MatSort;
 
-  constructor( public uploadService: UploadService) {
-    this.storelist = this.getStoreData();
-    if ( this.storelist.length === 0 ) {
-        this.noData = true;
+    constructor(public uploadService: UploadService) {
+        this.storelist = this.getStoreData();
+        if (this.storelist.length === 0) {
+            this.noData = true;
+        }
+        this.isLoadingResults = false;
+        this.dataSource = new MatTableDataSource(this.storelist);
     }
-    this.isLoadingResults = false;
-    this.dataSource = new MatTableDataSource(this.storelist);
-  }
 
-  ngOnInit() {
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
-  }
+    ngOnInit() {
+        this.dataSource.paginator = this.paginator;
+        this.dataSource.sort = this.sort;
+    }
 
-  applyFilter(filterValue: string) {
-     this.dataSource.filter = filterValue.trim().toLowerCase();
-     if (this.dataSource.paginator) {
-       this.dataSource.paginator.firstPage();
-     }
-  }
+    applyFilter(filterValue: string) {
+        this.dataSource.filter = filterValue.trim().toLowerCase();
+        if (this.dataSource.paginator) {
+            this.dataSource.paginator.firstPage();
+        }
+    }
 
     /** Whether the number of selected elements matches the total number of rows. */
     isAllSelected() {
@@ -109,7 +109,7 @@ export class HomeComponent implements OnInit {
     getStoreData(): PeriodicElement[] {
         const storeDetails = JSON.parse(localStorage.getItem('Store'));
         const survey = JSON.parse(localStorage.getItem('Survey'));
-        if ( storeDetails != null ) {
+        if (storeDetails != null) {
             storeDetails.forEach((element) => {
                 let row = {
                     name: element.Name,
@@ -135,8 +135,8 @@ export class HomeComponent implements OnInit {
             survey => survey.Store_Name === name);
         if (surveyByName != null) {
             surveyByName.forEach((element) => {
-                let month = this.monthNames[element.Month.split('/')[1]-1];
-                if( !result.has(month) ){
+                let month = this.monthNames[element.Month.split('/')[1] - 1];
+                if (!result.has(month)) {
                     result.set(month, []);
                 }
                 result.get(month).push({name: element.Result, value: parseFloat(element.Value)});
@@ -182,7 +182,7 @@ export class HomeComponent implements OnInit {
             retailData => retailData.Store_Name === name);
         if (retailDataByName != null) {
             retailDataByName.forEach((element) => {
-                if( !result.has(element.Product) ){
+                if (!result.has(element.Product)) {
                     result.set(element.Product, []);
                 }
                 result.get(element.Product).push({name: element.Sales_Date, value: parseFloat(element.Sale)});
