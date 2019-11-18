@@ -16,16 +16,10 @@ describe('GroupedBarRepresentationComponent', () => {
     expect(app).toBeTruthy();
   });
 
-  it(`should have as title 'angularmat'`, () => {
+  it(`should have as title 'store-dashboard'`, () => {
     const fixture = TestBed.createComponent(PieRepresentationComponent);
     const app = fixture.debugElement.componentInstance;
-    expect(app.title).toEqual('angularmat');
+    expect(app.title).toEqual('store-dashboard');
   });
 
-  it('should render title in a h1 tag', () => {
-    const fixture = TestBed.createComponent(PieRepresentationComponent);
-    fixture.detectChanges();
-    const compiled = fixture.debugElement.nativeElement;
-    expect(compiled.querySelector('h1').textContent).toContain('Welcome to angularmat!');
-  });
 });
